@@ -3,12 +3,12 @@
     <template v-slot:item.number="{ rowIndex }">{{ rowIndex + 1 }}</template>
     <template v-slot:item.actions="{ item }">
       <span class="d-flex align-items-center">
-        <button
+        <router-link
             class="btn btn-sm btn-primary me-2 flex-shrink-0"
-            @click="editTodo(item)"
+            :to="{ name: 'EditTodo', params: { id: item.id } }"
         >
           Edit todo
-        </button>
+        </router-link>
         <button
             class="btn btn-sm btn-danger flex-shrink-0"
             @click="deleteTodo(item.id)"
@@ -48,9 +48,6 @@ export default {
   },
 
   methods: {
-    editTodo(item) {
-      console.log(item);
-    },
     deleteTodo(id) {
       this.$store.dispatch('deleteTodo', id);
     },

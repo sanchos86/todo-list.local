@@ -9,26 +9,41 @@ export default new Vuex.Store({
   state: {
     todos: [],
   },
+  getters: {
+    getTodoById: (state) => (id) => state.todos.find((todo) => todo.id === id),
+  },
   mutations: {
-    setTodos(state, todos) {
+    setTodos: (state, todos) => {
       state.todos = todos;
     },
-    addTodo(state, todo) {
+    addTodo: (state, todo) => {
       state.todos.push(todo);
     },
-    deleteTodo(state, id) {
+    deleteTodo: (state, id) => {
       state.todos = state.todos.filter((todo) => todo.id !== id);
+    },
+    editTodo: (state, todo) => {
+      for (let i = 0; i < state.todos.length; i++) {
+        const originalTodo = state.todos[i];
+        if (originalTodo.id === todo.id) {
+          state.todos[i] = todo;
+          break;
+        }
+      }
     },
   },
   actions: {
-    setTodos({ commit }, todos) {
+    setTodos: ({ commit }, todos) => {
       commit('setTodos', todos);
     },
-    addTodo({ commit }, todo) {
+    addTodo: ({ commit }, todo) => {
       commit('addTodo', todo);
     },
-    deleteTodo({ commit }, id) {
+    deleteTodo: ({ commit }, id) => {
       commit('deleteTodo', id);
+    },
+    editTodo: ({ commit }, todo) => {
+      commit('editTodo', todo);
     },
   },
   modules: {

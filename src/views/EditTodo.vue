@@ -3,7 +3,12 @@
     <div class="container">
       <div class="row">
         <div class="col">
-          EditTodo
+          <h1>Edit todo</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <edit-todo-form />
         </div>
       </div>
     </div>
@@ -11,11 +16,13 @@
 </template>
 
 <script>
+import EditTodoForm from '@/components/EditTodoForm.vue';
+
 export default {
   name: 'EditTodo',
+
+  components: {
+    EditTodoForm,
+  },
 };
 </script>
-
-<style scoped>
-
-</style>
