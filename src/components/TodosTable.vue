@@ -11,7 +11,7 @@
         </button>
         <button
             class="btn btn-sm btn-danger flex-shrink-0"
-            @click="deleteTodo(item)"
+            @click="deleteTodo(item.id)"
         >
           Delete todo
         </button>
@@ -51,8 +51,8 @@ export default {
     editTodo(item) {
       console.log(item);
     },
-    deleteTodo(item) {
-      console.log(item);
+    deleteTodo(id) {
+      this.$store.dispatch('deleteTodo', id);
     },
   },
 };

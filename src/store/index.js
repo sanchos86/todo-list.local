@@ -11,10 +11,16 @@ export default new Vuex.Store({
     addTodo(state, todo) {
       state.todos.push(todo);
     },
+    deleteTodo(state, id) {
+      state.todos = state.todos.filter((todo) => todo.id !== id);
+    },
   },
   actions: {
     addTodo({ commit }, todo) {
       commit('addTodo', todo);
+    },
+    deleteTodo({ commit }, id) {
+      commit('deleteTodo', id);
     },
   },
   modules: {
