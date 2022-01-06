@@ -3,10 +3,24 @@ import Vuelidate from 'vuelidate';
 import App from '@/App.vue';
 import router from '@/router';
 import store from '@/store';
+import localStorageKeys from '@/constants/localStorageKeys';
 
 Vue.config.productionTip = false;
 
 Vue.use(Vuelidate);
+
+let todos;
+
+try {
+  todos = JSON.parse(localStorage.getItem(localStorageKeys.TODOS));
+} catch (e) {
+}
+
+(async () => {
+  if (Array.isArray(todos)) {
+    await store.dispatch('setTodos', todos);
+  }
+})();
 
 new Vue({
   router,
