@@ -18,7 +18,9 @@
       :disabled="!todo"
     />
     <div class="text-end">
-      <button type="submit" class="btn btn-primary" :disabled="isFormInvalid">Edit todo</button>
+      <button type="submit" class="btn btn-primary" :disabled="isFormInvalid || !anyFieldChanged">
+        Edit todo
+      </button>
     </div>
   </form>
 </template>
@@ -71,6 +73,13 @@ export default {
     },
     todoId() {
       return this.$route.params.id;
+    },
+    anyFieldChanged() {
+      const { todo, form } = this;
+      if (!todo) {
+        return false;
+      }
+      return todo.description !== form.description || todo.priority !== form.priority;
     },
   },
 
