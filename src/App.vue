@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <base-nav class="mb-4" />
+    <the-nav class="mb-4" />
     <main>
       <transition name="slide-in" mode="out-in">
         <router-view />
@@ -10,11 +10,11 @@
 </template>
 
 <script>
-import BaseNav from '@/components/BaseNav.vue';
+import TheNav from '@/components/TheNav.vue';
 
 export default {
   components: {
-    BaseNav,
+    TheNav,
   },
 };
 </script>

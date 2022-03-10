@@ -4,6 +4,7 @@ import App from '@/App.vue';
 import router from '@/router';
 import store from '@/store';
 import localStorageKeys from '@/constants/localStorageKeys';
+import '@/directives/directives';
 
 Vue.config.productionTip = false;
 
