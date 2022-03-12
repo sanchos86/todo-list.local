@@ -1,9 +1,10 @@
 <template>
   <div class="position-relative">
-    <label v-if="hasLabel" :for="normalizedId" class="form-label">
-      {{ $slots.default || label }}
+    <label v-if="hasLabel" :for="normalizedId" class="form-label" v-test="{ id: 'label' }">
+      <slot>{{ label }}</slot>
     </label>
     <input
+        v-test="{ id: 'input' }"
         type="text"
         class="form-control"
         v-bind="$attrs"
@@ -12,7 +13,7 @@
         :class="{ 'is-invalid': invalid }"
         @input="$emit('input', $event.target.value)"
     >
-    <div v-if="showError" class="invalid-tooltip">{{ error }}</div>
+    <div v-if="showError" class="invalid-tooltip" v-test="{ id: 'error-message' }">{{ error }}</div>
   </div>
 </template>
 
