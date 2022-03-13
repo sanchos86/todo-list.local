@@ -1,13 +1,13 @@
 <template>
   <table class="table">
     <thead>
-    <tr>
-      <td v-for="item in headers" :key="item.value">{{ item.text }}</td>
+    <tr v-test="{ id: 'thead-row' }">
+      <th v-for="item in headers" :key="item.value">{{ item.text }}</th>
     </tr>
     </thead>
-    <tbody>
+    <tbody v-test="{ id: 'tbody' }">
       <template v-if="items.length">
-        <tr v-for="(item, rowIndex) in items" :key="rowIndex">
+        <tr v-for="(item, rowIndex) in items" :key="rowIndex" v-test="{ id: 'data-row' }">
           <td v-for="(header, columnIndex) in headers" :key="header.value">
             <slot
                 :name="`item.${header.value}`"
@@ -20,8 +20,10 @@
           </td>
         </tr>
       </template>
-      <tr v-else>
-        <td class="text-center" :colspan="colspan">{{ noDataText }}</td>
+      <tr v-else v-test="{ id: 'no-data-row' }">
+        <td class="text-center" :colspan="colspan">
+          {{ noDataText }}
+        </td>
       </tr>
     </tbody>
   </table>
@@ -34,7 +36,7 @@ export default {
   props: {
     items: {
       type: Array,
-      default: () => ([]),
+      required: true,
     },
     headers: {
       type: Array,
@@ -53,7 +55,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-
-</style>
