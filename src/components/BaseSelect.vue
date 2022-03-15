@@ -1,9 +1,10 @@
 <template>
   <div class="position-relative">
-    <label v-if="hasLabel" :for="normalizedId" class="form-label">
-      {{ $slots.default || label }}
+    <label v-if="hasLabel" :for="normalizedId" class="form-label" v-test="{ id: 'label' }">
+      <slot>{{ label }}</slot>
     </label>
     <select
+        v-test="{ id: 'select' }"
         class="form-control"
         v-bind="$attrs"
         :id="normalizedId"
@@ -15,11 +16,12 @@
           v-for="option in options"
           :key="option.value"
           :value="option.value"
+          v-test="{ id: 'option' }"
       >
         {{ option.label }}
       </option>
     </select>
-    <div v-if="showError" class="invalid-tooltip">{{ error }}</div>
+    <div v-if="showError" class="invalid-tooltip" v-test="{ id: 'error-message' }">{{ error }}</div>
   </div>
 </template>
 
