@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="addTodo">
+  <form @submit.prevent="addTodo" v-test="{ id: 'form' }">
     <base-input
         v-model="$v.form.description.$model"
         class="mb-3"
@@ -16,7 +16,14 @@
         :error="$getErrorMessage($v.form.priority)"
     />
     <div class="text-end">
-      <button type="submit" class="btn btn-primary" :disabled="isFormInvalid">Add todo</button>
+      <button
+        type="submit"
+        class="btn btn-primary"
+        :disabled="isFormInvalid"
+        v-test="{ id: 'submit-button' }"
+      >
+        Add todo
+      </button>
     </div>
   </form>
 </template>
@@ -71,17 +78,20 @@ export default {
 
   methods: {
     async addTodo() {
-      const { isFormInvalid, form } = this;
-      if (!isFormInvalid) {
-        const todo = {
-          id: uuidv4(),
-          description: form.description,
-          priority: form.priority,
-        };
-        await this.$store.dispatch('addTodo', todo);
-        await this.$router.push({ name: 'Home' });
-      } else {
-        this.$v.form.$touch();
+      try {
+        const { isFormInvalid, form } = this;
+        if (!isFormInvalid) {
+          const todo = {
+            id: uuidv4(),
+            description: form.description,
+            priority: form.priority,
+          };
+          await this.$store.dispatch('addTodo', todo);
+          await this.$router.push({ name: 'Home' });
+        } else {
+          this.$v.form.$touch();
+        }
+      } catch (e) {
       }
     },
   },
