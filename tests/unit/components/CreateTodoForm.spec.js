@@ -4,6 +4,7 @@ import Vuex from 'vuex';
 
 import CreateTodoForm from '@/components/CreateTodoForm.vue';
 import test from '@/directives/test';
+import priorities from '@/constants/priorities';
 
 const actions = {
   addTodo: jest.fn().mockResolvedValue(null),
@@ -11,13 +12,12 @@ const actions = {
 const $router = {
   push: jest.fn().mockResolvedValue(null),
 };
-let store;
 
 const createWrapper = (extraOptions = {}) => {
   const localVue = createLocalVue();
   localVue.use(Vuex);
   localVue.use(Vuelidate);
-  store = new Vuex.Store({
+  const store = new Vuex.Store({
     actions,
   });
   const defaultOptions = {
@@ -33,6 +33,10 @@ const createWrapper = (extraOptions = {}) => {
   const options = { ...defaultOptions, ...extraOptions };
   return shallowMount(CreateTodoForm, options);
 };
+
+beforeEach(() => {
+  jest.resetAllMocks();
+});
 
 describe('CreateTodoForm.vue', () => {
   it('when computed isFormInvalid is true then form submit button should be disabled', () => {
@@ -83,9 +87,59 @@ describe('CreateTodoForm.vue', () => {
       expect($router.push).toHaveBeenCalledTimes(1);
       expect($router.push.mock.calls[0][0]).toEqual({ name: 'Home' });
     });
-    it.todo('when form is submitted and computed isFormInvalid is true and expected store action failed then it should stay on the current route');
-    it.todo('when form is submitted and computed isFormInvalid is false then expected method of vuelidate should be called');
+
+    it('when form is submitted and computed isFormInvalid is true and expected store action failed then it should stay on the current route', async () => {
+      // eslint-disable-next-line no-shadow
+      const $router = {
+        push: jest.fn().mockResolvedValue(null),
+      };
+      const store = new Vuex.Store({
+        actions: {
+          addTodo: jest.fn().mockRejectedValue(new Error()),
+        },
+      });
+      const extraOptions = {
+        store,
+        mocks: {
+          $router,
+        },
+        computed: {
+          isFormInvalid() {
+            return false;
+          },
+        },
+      };
+      const wrapper = createWrapper(extraOptions);
+      const form = wrapper.find('[data-test-id="form"]');
+      await form.trigger('submit.prevent');
+
+      expect($router.push).not.toHaveBeenCalled();
+    });
+
+    it.todo('when form is submitted and computed isFormInvalid is false then $touch method of vuelidate should be called');
   });
 
-  it.todo('should correctly validate different data sets');
+  describe('should correctly validate different data sets', () => {
+    const wrapper = createWrapper();
+    const formData = [
+      [{ form: { description: 'hello', priority: '' } }, true],
+      [{ form: { description: 'hello', priority: priorities.high.value } }, true],
+      [{ form: { description: 'hello world', priority: '' } }, true],
+      [{ form: { description: '', priority: priorities.high.value } }, true],
+      [{ form: { description: 'hello world', priority: priorities.high.value } }, false],
+    ];
+
+    it('computed isFormInvalid is true with initial form values', () => {
+      const { isFormInvalid } = wrapper.vm;
+
+      expect(isFormInvalid).toBe(true);
+    });
+
+    it.each(formData)('when form data is %j then computed isFormInvalid should be %p', async (data, expected) => {
+      await wrapper.setData(data);
+      const { isFormInvalid } = wrapper.vm;
+
+      expect(isFormInvalid).toBe(expected);
+    });
+  });
 });
