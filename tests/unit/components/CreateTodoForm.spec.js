@@ -66,7 +66,7 @@ describe('CreateTodoForm.vue', () => {
   });
 
   describe('form submission', () => {
-    it('when form is submitted and computed isFormInvalid is true then expected store action should be called with expected arguments and navigation to home route should happen', async () => {
+    it('when form is submitted and computed isFormInvalid is false then expected store action should be called with expected arguments and navigation to home route should happen', async () => {
       const wrapper = createWrapper({
         computed: {
           isFormInvalid() {
@@ -88,7 +88,7 @@ describe('CreateTodoForm.vue', () => {
       expect($router.push.mock.calls[0][0]).toEqual({ name: 'Home' });
     });
 
-    it('when form is submitted and computed isFormInvalid is true and expected store action failed then it should stay on the current route', async () => {
+    it('when form is submitted and computed isFormInvalid is false and expected store action failed then it should stay on the current route', async () => {
       // eslint-disable-next-line no-shadow
       const $router = {
         push: jest.fn().mockResolvedValue(null),

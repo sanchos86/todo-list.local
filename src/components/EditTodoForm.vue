@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="editTodo">
+  <form @submit.prevent="editTodo" v-test="{ id: 'form' }">
     <base-input
       v-model="$v.form.description.$model"
       label="Description:"
@@ -7,6 +7,7 @@
       :invalid="$v.form.description.$error"
       :error="$getErrorMessage($v.form.description)"
       :disabled="!todo"
+      v-test="{ id: 'input' }"
     />
     <base-select
       v-model="$v.form.priority.$model"
@@ -16,9 +17,15 @@
       :invalid="$v.form.priority.$error"
       :error="$getErrorMessage($v.form.priority)"
       :disabled="!todo"
+      v-test="{ id: 'select' }"
     />
     <div class="text-end">
-      <button type="submit" class="btn btn-primary" :disabled="isFormInvalid || !anyFieldChanged">
+      <button
+        type="submit"
+        class="btn btn-primary"
+        :disabled="isFormInvalid || !anyFieldChanged"
+        v-test="{ id: 'edit-todo-form' }"
+      >
         Edit todo
       </button>
     </div>
@@ -93,17 +100,25 @@ export default {
 
   methods: {
     async editTodo() {
-      const { isFormInvalid, form, todoId } = this;
-      if (!isFormInvalid) {
-        const todo = {
-          id: todoId,
-          description: form.description,
-          priority: form.priority,
-        };
-        await this.$store.dispatch('editTodo', todo);
-        await this.$router.push({ name: 'Home' });
-      } else {
-        this.$v.form.$touch();
+      try {
+        const {
+          isFormInvalid,
+          anyFieldChanged,
+          form,
+          todoId,
+        } = this;
+        if (!isFormInvalid && anyFieldChanged) {
+          const todo = {
+            id: todoId,
+            description: form.description,
+            priority: form.priority,
+          };
+          await this.$store.dispatch('editTodo', todo);
+          await this.$router.push({ name: 'Home' });
+        } else {
+          this.$v.form.$touch();
+        }
+      } catch (e) {
       }
     },
     updateForm(todo) {
