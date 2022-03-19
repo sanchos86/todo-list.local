@@ -34,7 +34,7 @@ const createWrapper = (extraOptions = {}) => {
   return shallowMount(CreateTodoForm, options);
 };
 
-beforeEach(() => {
+afterEach(() => {
   jest.resetAllMocks();
 });
 

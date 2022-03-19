@@ -1,8 +1,10 @@
 <template>
   <base-table :headers="headers" :items="todos">
-    <template v-slot:item.number="{ rowIndex }">{{ rowIndex + 1 }}</template>
+    <template v-slot:item.number="{ rowIndex }">
+      <span v-test="{ id: 'number' }">{{ rowIndex + 1 }}</span>
+    </template>
     <template v-slot:item.actions="{ item }">
-      <span class="d-flex align-items-center">
+      <span class="d-flex align-items-center" v-test="{ id: 'actions' }">
         <router-link
             class="btn btn-sm btn-primary me-2 flex-shrink-0"
             :to="{ name: 'EditTodo', params: { id: item.id } }"
@@ -10,6 +12,7 @@
           Edit todo
         </router-link>
         <button
+            v-test="{ id: 'delete-todo-button' }"
             class="btn btn-sm btn-danger flex-shrink-0"
             @click="deleteTodo(item.id)"
         >
